@@ -30,7 +30,11 @@ To apply RS-ExpNet-CRNMF, please run the Matlab script file `./demo.m` and the r
 References
 ------------------------
 [1] Cancer Genome Atlas Research Network and others: Comprehensive genomic characterization defines human glioblastoma genes and core pathways. Nature 455(7216), 1061 (2008)
+
 [2] Cancer Genome Atlas Network and others: Comprehensive molecular characterization of human colon and rectal cancer. Nature 487(7407), 330-337 (2012)
+
 [3] Cancer Genome Atlas Network and others: Comprehensive molecular portraits of human breast tumours. Nature 490(7418), 61-70 (2012)
-[4] Gao, Jianjiong and Aksoy, Bulent Arman and Dogrusoz, Ugur and Dresdner, Gideon and Gross, Benjamin and Sumer, S Onur and Sun, Yichao and Jacobsen, Anders and Sinha, Rileen and Larsson, Erik and others: Integrative analysis of complex cancer genomics and clinical profiles using the cBioPortal. Science signaling 6(269), 1 (2013)
+
+[4] Gao, Jianjiong and Aksoy, Bu:lent Arman and Dogrusoz, Ugur and Dresdner, Gideon and Gross, Benjamin and Sumer, S Onur and Sun, Yichao and Jacobsen, Anders and Sinha, Rileen and Larsson, Erik and others: Integrative analysis of complex cancer genomics and clinical profiles using the cBioPortal. Science signaling 6(269), 1 (2013)
+
 [5] Razick, S., Magklaras, G., Donaldson, I.M.: iRefIndex: a consolidated protein interaction database with provenance. BMC bioinformatics 9(1), 1 (2008)
