@@ -7,9 +7,9 @@ load(network_dir);
 len_gene = length(GeneSymbol_net);
 
 D_mat_half_inv = sparse(diag(sum(Adj_mat).^(-0.5)));
-D_G = speye(len_gene);
-W_G = D_mat_half_inv*Adj_mat*D_mat_half_inv;
-L_G = D_G-W_G;
+D_V = speye(len_gene);
+W_V = D_mat_half_inv*Adj_mat*D_mat_half_inv;
+L_V = D_V-W_V;
 
 % Creating Directorys
 output_save_dir = './output';
@@ -36,49 +36,54 @@ for i_file = 1:length(CancerDataList)
     
     PearsonCor = corr(X_exp');
     sigma_bandwidth = 1.0;
-    W_S = exp(-((1-PearsonCor).^2)/(2*sigma_bandwidth^2));
-    D_S = diag(sum(W_S,1));
-    L_S = D_S - W_S;
+    W_U = exp(-((1-PearsonCor).^2)/(2*sigma_bandwidth^2));
+    D_U = diag(sum(W_U,1));
+    L_U = D_U - W_U;
     
     K_num = 4;
-    lambda_S = 1.0;
-    lambda_G = 1.0;
+    lambda_LU = 1.0; lambda_RU = 1.0;
+    lambda_LV = 1.0; lambda_RV = 1.0;
     
     % --- RS-CRNMF --- %
     disp('run RS-CRNMF ...');
     eps_t = 10^-5;
     
     % --- random initialization --- %
-    S_init = max(rand(N_sample,K_num),eps_t);
-    S_prev = S_init*diag(sum(S_init,1).^-1);
-    G_init = max(rand(len_gene,K_num),eps_t);
-    G_prev = G_init*diag(sum(S_init,1));
-    delta_S = 1; delta_G = 1;
+    U_init = max(rand(N_sample,K_num),eps_t);
+    U_prev = U_init*diag(sum(U_init,1).^-1);
+    V_init = max(rand(len_gene,K_num),eps_t);
+    V_prev = V_init*diag(sum(U_init,1));
+    delta_U = 1; delta_V = 1;
     cnt = 0;
-    while delta_S > 10^-3 || delta_G > 10^-3 && cnt <= 500
+    while delta_U > 10^-3 || delta_V > 10^-3 && cnt <= 500
         cnt = cnt + 1;
-        G_numer = X_mut'*S_prev + lambda_G*W_G*G_prev;
-        G_denum = G_prev*(S_prev'*S_prev) + lambda_G*D_G*G_prev + lambda_G*ones(len_gene,len_gene)*G_prev;
-        G_new = G_prev.*G_numer./(G_denum + eps_t);
-
-        S_numer = X_mut*G_new + lambda_S*W_S*S_prev;
-        S_denum = S_prev*(G_new'*G_new) + lambda_S*D_S*S_prev + lambda_S*S_prev;
-        S_new = S_prev.*S_numer./(S_denum + eps_t);
-
-        NormFactor = sum(S_new,1);
-        S_new = S_new*diag(NormFactor.^-1);
-        G_new = G_new*diag(NormFactor);
-
-        delta_S = norm(S_prev - S_new,'fro')^2/(norm(S_prev,'fro')^2);
-        delta_G = norm(G_prev - G_new,'fro')^2/(norm(G_prev,'fro')^2);
+        V_numer = X_mut'*U_prev + lambda_LV*W_V*V_prev;
+        V_denum = V_prev*(U_prev'*U_prev) + lambda_LV*D_V*V_prev + lambda_RV*ones(len_gene,len_gene)*V_prev;
+        V_new = V_prev.*V_numer./(V_denum + eps_t);
+        
+        U_numer = X_mut*V_new + lambda_LU*W_U*U_prev;
+        U_denum = U_prev*(V_new'*V_new) + lambda_LU*D_U*U_prev + lambda_RU*U_prev;
+        U_new = U_prev.*U_numer./(U_denum + eps_t);
+        
+        NormFactor = sum(U_new,1);
+        U_new = U_new*diag(NormFactor.^-1);
+        V_new = V_new*diag(NormFactor);
+        
+        delta_U = norm(U_prev - U_new,'fro')^2/(norm(U_prev,'fro')^2);
+        delta_V = norm(V_prev - V_new,'fro')^2/(norm(V_prev,'fro')^2);
         
         if ~mod(cnt,10)
             disp(['Iteration: ' num2str(cnt,'%d')]);
         end
         
-        S_prev = S_new;
-        G_prev = G_new;
+        U_prev = U_new;
+        V_prev = V_new;
     end
     disp(['Done!' char(10) 'Total iteration: ' num2str(cnt,'%d')]);
-    save([output_save_dir '/result_' file_name_t '.mat'],'X_mut','S_new','G_new');
+    
+    [~, ind_gene] = sort(max(V_new,[],2),'descend');
+    Candidates_list = GeneSymbol_net(ind_gene(1:200));
+
+    save([output_save_dir '/result_' file_name_t '.mat'],'X_mut','U_new','V_new',...
+        'Candidates_list');
 end
