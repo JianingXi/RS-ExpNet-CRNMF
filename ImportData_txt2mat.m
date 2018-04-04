@@ -11,8 +11,11 @@ save_dir = './input_cancer_data';
 mkdir(save_dir);
 
 % 3:length(file_list)
-for i_file = 3:length(file_list)
+for i_file = 1:length(file_list)
     cur_name = file_list(i_file).name;
+    if strcmp(cur_name,'.') || strcmp(cur_name,'..')
+        continue;
+    end
     disp(cur_name);
     cur_file_dir = [root_dir '/' cur_name ];
     
