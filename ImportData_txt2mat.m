@@ -1,3 +1,6 @@
+% The demo file of RS-ExpNet-CRNMF
+% Author: Jianing Xi, USTC
+
 bin_path = './bin';
 addpath(bin_path);
 

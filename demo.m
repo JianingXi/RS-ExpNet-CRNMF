@@ -1,6 +1,3 @@
-CancerDataList = {'brca_tcga_pub';'coadread_tcga_pub';'gbm_tcga_pub'};
-
-
 disp('Prior information: network');
 network_dir = './network/Adj_mat.mat';
 load(network_dir);
@@ -10,17 +7,17 @@ D_mat_half_inv = sparse(diag(sum(Adj_mat).^(-0.5)));
 D_V = speye(len_gene);
 W_V = D_mat_half_inv*Adj_mat*D_mat_half_inv;
 L_V = D_V-W_V;
+% The demo file of RS-ExpNet-CRNMF
+% Author: Jianing Xi, USTC
 
 % Creating Directorys
 output_save_dir = './output';
 mkdir(output_save_dir);
 
-for i_file = 1:length(CancerDataList)
-    file_name_t = CancerDataList{i_file};
-    input_mat_dir = ['./input_cancer_data/' file_name_t '.mat'];
-    if ~exist(input_mat_dir,'file')
-        continue;
-    end
+cancer_file_list = dir('./input_cancer_data/*.mat');
+for i_file = 1:length(cancer_file_list)
+    file_name = cancer_file_list(i_file).name;
+    input_mat_dir = ['./input_cancer_data/' file_name];
     
     disp([char(10) '-- -- File No.' num2str(i_file) ': ' file_name_t]);
 
@@ -83,7 +80,7 @@ for i_file = 1:length(CancerDataList)
     
     [~, ind_gene] = sort(max(V_new,[],2),'descend');
     Candidates_list = GeneSymbol_net(ind_gene(1:200));
-
-    save([output_save_dir '/result_' file_name_t '.mat'],'X_mut','U_new','V_new',...
+    
+    save([output_save_dir '/result_' file_name_t '.mat'],'U_new','V_new',...
         'Candidates_list');
 end
