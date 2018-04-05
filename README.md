@@ -33,12 +33,12 @@ In file `./output/result_[cancer_file_name].mat`, there are four output variable
 1. U_new
 The variables U_new is the output sample representation matrix,
 ![image](https://github.com/JianingXi/RS-ExpNet-CRNMF/blob/master/bin/U_mat.PNG)
-where K is the predefined dimension number of the latent representations. For k \in {1, . . ., K}, the k-th vector u_{*,k} indicates the assignment weights of the cancer cell sample to the k-th latent dimension. The i-th u_{i,*} indicates the low-dimensional representations of the i-th cancer cell sample.
+where K is the predefined dimension number of the latent representations. For k from 1 to K, the k-th vector u_{\*,k} indicates the assignment weights of the cancer cell sample to the k-th latent dimension. The i-th u_{i,\*} indicates the low-dimensional representations of the i-th cancer cell sample.
 
 2. V_new
 The matrix V_new is the gene representation matrix of the investigated genes,
 ![image](https://github.com/JianingXi/RS-ExpNet-CRNMF/blob/master/bin/V_mat.PNG)
-where the k-th vector v_{*,k} representing the weights of the tested genes in the k-th latent dimension. Each v_{j,*} denotes the representations of the tested genes in the latent dimension. 
+where the k-th vector v_{\*,k} representing the weights of the tested genes in the k-th latent dimension. Each v_{j,\*} denotes the representations of the tested genes in the latent dimension. 
 
 3. Candidates_list
 This variable is a list containing driver gene candidates selected from the top 200 genes ranked by scores in gene representation matrix V_new.
