@@ -4,14 +4,17 @@ Discovering mutated driver genes through a robust and sparse co-regularized matr
 
 Developer: Jianing Xi <xjn@mail.ustc.edu.cn> from Health Informatics Lab, School of Information Science and Technology, University of Science and Technology of China
 
-## Instructions to RS-ExpNet-CRNMF (version 1.0.0)
+## Citation
+[Xi, J., Wang, M. and Li, A., 2018. Discovering mutated driver genes through a robust and sparse co-regularized matrix factorization framework with prior information from mRNA expression patterns and interaction network. BMC bioinformatics, 19(1), p.214.](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-018-2218-y)
 
-Requirement
+# Instructions to RS-ExpNet-CRNMF (version 1.0.0)
+
+## Requirement
 ------------------------
 * 4GB memory
 * MATLAB R2015a or later
 
-Input data
+## Input data
 ------------------------
 1. Somatic mutations of patients across multiple cancer types
 The files `./input_cancer_data/gbm_tcga_pub.mat` `./input_cancer_data/coadread_tcga_pub.mat` and `./input_cancer_data/brca_tcga_pub.mat` contain the TCGA somatic mutation data matrix of three types of cancers, glioblastoma multiforme (GBM) [1], colon and rectal cancer (COADREAD) [2] and breast cancer (BRCA) [3], which is downloaded from [cBioPortal](http://www.cbioportal.org/data_sets.jsp) [4].
@@ -22,11 +25,11 @@ The TCGA mRNA expression data of the samples of three types of cancers above are
 3. Prior information: interaction network
 The file `./network/Adj_mat.mat` contains the gene nodes and the edges of interaction network [iRefIndex 9](http://irefindex.org) [5].
 
-run RS-ExpNet-CRNMF
+## run RS-ExpNet-CRNMF
 ------------------------
 To apply RS-ExpNet-CRNMF, please run the Matlab script file `./demo.m` and the results will be automatically saved in file `./output/result_[cancer_file_name].mat` after the program is finished.
 
-Output data
+## Output data
 ------------------------
 In file `./output/result_[cancer_file_name].mat`, there are four output variables:
 
@@ -43,7 +46,7 @@ where the k-th vector v_{\*,k} representing the weights of the tested genes in t
 3. Candidates_list
 This variable is a list containing driver gene candidates selected from the top 200 genes ranked by scores in gene representation matrix V_new.
 
-Applying RS-ExpNet-CRNMF to other dataset
+## Applying RS-ExpNet-CRNMF to other dataset
 ------------------------
 To facilitate the applications to users' own dataset, we provide data a script file for data format transformation `./ImportData_txt2mat.m` to transform a txt-format dataset to mat-format data used in this package.
 * Step 1: the users can create a new directory, and the directory name can be the name of the users' dataset. The txt-format files of somatic mutation and mRNA gene expression of the dataset should be included in this directory. An example of the application another dataset of kidney renal clear cell carcinoma (KIRC) is provided as two txt-format files `./raw_input_data/kirc_tcga_pub/data_mutations_extended.txt` (somatic mutation) and `./raw_input_data/kirc_tcga_pub/data_expression_median.txt` (mRNA gene expression) (the two files are downloaded from [cBioPortal](http://www.cbioportal.org/data_sets.jsp) [4]).
@@ -52,7 +55,7 @@ To facilitate the applications to users' own dataset, we provide data a script f
 * Step 4: please run the Matlab script file `./demo.m` and the mat-format file of the users' dataset will be automatically scanned and analyzed by RS-ExpNet-CRNMF. The results as output file will be save after the program is finished. For KIRC example, when the script of RS-ExpNet-CRNMF is finished, the output file of KIRC result will be automatically saved in `./output/result_kirc_tcga_pub.mat`.
 
 
-References
+## References
 ------------------------
 [1] Cancer Genome Atlas Research Network and others: Comprehensive genomic characterization defines human glioblastoma genes and core pathways. Nature 455(7216), 1061 (2008)
 
